@@ -1,37 +1,80 @@
-import {useEffect, useState} from 'react'
-import axios from 'axios';
+import React, { useState } from 'react'
 
 //Components
 import TableCoins from './components/TableCoins'
+import Favourites from './components/Favourites'
+import Pagination  from './components/Pagination'
+import Trending  from './components/Trending'
+import Header  from './components/Header'
 
 //Styles
+import { Container, Grid, Typography  } from '@mui/material'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
+//hooks
+import { useCoinsFetch } from './hooks/useCoinsFetch'
+import { useFavourites } from './hooks/useFavourites'
+
 
 function App() {
+  const {
+    favourites,
+    addFavourite
+  } = useFavourites();
 
-  const [coins, setCoins] = useState([]);
+  const {
+    coins,
+    isLoading,
+    error
+  } = useCoinsFetch();
+  
   const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(0);
+  const [coinsPerPage] = useState(10);
+  const [totalCoins] = useState(100);
 
+  // Change page
+  const paginate = async (pageNumber) => {
+    setCurrentPage(pageNumber);
+  } 
 
-  const getData = async() => {
-    const res = await axios.get('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false')    
-    console.log(res.data);
-    setCoins(res.data)
+  // Searching Coins Input
+  const searching = (coin) => {
+    setSearch(coin)
   }
-  useEffect(()=>{
-    getData()
-  }, []);
 
-
+  if (error) return <Container maxWidth="xl"><Typography variant='h2'>Something went wrong ..</Typography></Container>;
+  
   return (
-    <div className="container">
-      <div className="row">
-        <input className='form-input bg-dark text-light mt-4 col-4' placeholder='Search a coin' onChange={e => setSearch(e.target.value)} />
-        <TableCoins coins={coins} search={search} />
-      </div>  
-    </div>
+    <Container maxWidth="xl" >
+      <Header searching={searching}/>
+      <Grid container spacing={2} columns={{ xs: 4, md: 12 }} >
+        <Grid item xs={4}>
+          <Favourites  favouritesCoins={favourites} coins={coins}  />
+        </Grid>
+        <Grid item xs={4}>
+          <Trending sort={true} title="Biggest Gainers"  />
+        </Grid>
+        <Grid item xs={4}>
+          <Trending sort={false} title="Running Badly"  />
+        </Grid>
+      </Grid>
+      <TableCoins 
+        coins={coins} 
+        search={search} 
+        loading={isLoading}
+        currentPage={currentPage}
+        coinsPerPage={coinsPerPage}
+        addFavourite={addFavourite}
+        favourites={favourites}
+        />
+      <Pagination 
+        coinsPerPage={coinsPerPage}
+        totalCoins={totalCoins}
+        paginate={paginate}
+      />
+    </Container>
   );
 }
 
