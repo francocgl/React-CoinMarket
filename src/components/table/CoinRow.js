@@ -10,21 +10,10 @@ import {
  } from './columns'
 
 const CoinRow = ({coin, addFavourite, favourites}) => {
-    const [iconState, setIconState] = React.useState(false)
-
-    const handleState = id =>{
-      let isFavourite = favourites.find( element => element === id)
-      console.log(favourites) 
-      if(!isFavourite){
-        return setIconState(true)
-      }
-      return setIconState(false)
-    }
-  
     
     return (
         <TableRow>
-            <FavColumn coin={coin}  addFavourite={addFavourite} favourites={favourites} iconState={iconState} handleState={handleState} />
+            <FavColumn coin={coin}  addFavourite={addFavourite} favourites={favourites} />
             <CoinColumn coin={coin} />
             <PriceColumn coin={coin} />
             <PriceChangeColumn coin={coin} />

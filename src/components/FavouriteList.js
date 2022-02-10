@@ -11,7 +11,7 @@ const FavouriteList = ({coin, index}) => {
             <ListItemText>
                 <Typography variant='body1' style={{fontWeight : '600'}}>{coin.name} <small style={{color : 'grey'}}>{coin.symbol.toUpperCase()}</small></Typography> 
             </ListItemText>
-            <Typography variant='h6'> ${coin.current_price}</Typography> 
+            <Typography variant='body1' style={{fontWeight : '600'}}> ${coin.current_price}</Typography> 
         </ListItem>
     )
 };
