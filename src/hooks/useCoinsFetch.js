@@ -13,7 +13,7 @@ export const useCoinsFetch = (sort) => {
         setIsLoading(true)
         const res = await ( await fetch(API_URL) ).json() ;  
         try{
-        setIsLoading(false) 
+            setIsLoading(false) 
             setCoins(res)
         }catch (err){
             setError(err)

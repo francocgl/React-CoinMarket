@@ -4,7 +4,15 @@ import { CircularProgress, Table, TableHead, TableBody, TableRow, TableCell } fr
 // Headers array
 const headers = [ '#', 'Coin', 'Price', '24h %', 'Volume 24hs', 'Circulating Supply']
 
-const TableCoins = ({coins, search, loading, currentPage, coinsPerPage, addFavourite, favourites}) => {
+const TableCoins = ({
+    coins,
+    search,
+    loading,
+    currentPage,
+    coinsPerPage,
+    addFavourite,
+    favourites
+}) => {
     const filteredCoins = coins.filter( coin => 
        coin.name.includes(search.toUpperCase()) || coin.symbol.includes(search)  || coin.id.includes(search)
     )
@@ -25,12 +33,12 @@ const TableCoins = ({coins, search, loading, currentPage, coinsPerPage, addFavou
             <TableBody>
                 {  
                     (search) ?
-                    filteredCoins.map( (coin, index) => (
-                        <CoinRow  key={index} coin={coin} addFavourite={addFavourite} favourites={favourites} />
+                    filteredCoins.map( coin => (
+                        <CoinRow  key={coin.id} coin={coin} addFavourite={addFavourite} favourites={favourites} />
                     ))
                     :
-                    coins.slice(currentPage, currentPage+1 * coinsPerPage).map( (coin, index) => (
-                        <CoinRow  key={index} coin={coin} addFavourite={addFavourite} favourites={favourites} />
+                    coins.slice(currentPage, currentPage+1 * coinsPerPage).map( coin => (
+                        <CoinRow  key={coin.id} coin={coin} addFavourite={addFavourite} favourites={favourites} />
                     ))
                 }
             </TableBody>
